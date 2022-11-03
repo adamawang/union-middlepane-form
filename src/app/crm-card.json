@@ -1,7 +1,7 @@
 {
   "type": "crm-card",
   "data": {
-    "title": "Expedited shipping request",
+    "title": "Expedited shipping request form",
     "location": "crm.record.tab",
     "fetch": {
       "targetFunction": "crm-card",
