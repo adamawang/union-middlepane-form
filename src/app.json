@@ -1,0 +1,15 @@
+{
+  "name": "Expedited shipping request form",
+  "description": "Submit a request for expedited shipping",
+  "scopes": ["crm.objects.contacts.read", "crm.objects.contacts.write"],
+  "public": false,
+  "extensions": {
+    "crm": {
+      "cards": [
+        {
+          "file": "./crm-card.json"
+        }
+      ]
+    }
+  }
+}
