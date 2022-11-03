@@ -8,7 +8,7 @@
       "objectTypes": [
         {
           "name": "tickets",
-          "propertiesToSend": ["hs_object_id"]
+          "propertiesToSend": []
         }
       ]
     }
