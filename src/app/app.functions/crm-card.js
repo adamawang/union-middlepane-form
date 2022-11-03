@@ -6,7 +6,7 @@ exports.main = async (context, sendResponse) => {
     sendResponse({
       message: {
         type: 'SUCCESS',
-        body: `Request processed for ${product_name}.`,
+        body: `Request was successful. Deal created for ${product_name}`,
       },
     });
   }
