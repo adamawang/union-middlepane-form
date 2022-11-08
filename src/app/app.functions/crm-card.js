@@ -1,42 +1,23 @@
-exports.main = async (context, sendResponse) => {
-  const { event } = context;
-
-  if (event && event.type === 'SUBMIT') {
-    const { product_name,  } = event.payload.formState;
-    sendResponse({
-      message: {
-        type: 'SUCCESS',
-        body: `Request processed for ${product_name}.`,
-      },
-    });
-  }
-
+exports.main = async (context = {}, sendResponse) => {
   sendResponse({
     sections: [
       {
         type: 'text',
-        text: "To request expedited shipping, fill out the form below.",
+        text: "This example displays a simple form with a text input and a submit button. Inputting data into the field and clicking the submit button shows a banner with the user's input.",
       },
       {
         type: 'form',
         content: [
           {
             type: 'input',
-            name: 'product_name',
+            name: 'example_input',
             inputType: 'text',
-            label: 'Product name',
-            initialValue: '',
-          },
-          {
-            type: 'input',
-            name: 'ship_date',
-            inputType: 'text',
-            label: 'Ship by date',
-            initialValue: '',
+            label: 'Example input field',
+            initialValue: 'Default value of the input field',
           },
           {
             type: 'button',
-            text: 'Submit request',
+            text: 'Submit form',
             onClick: {
               type: 'SUBMIT',
               serverlessFunction: 'crm-card',
