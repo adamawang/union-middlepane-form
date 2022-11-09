@@ -1,14 +1,46 @@
+const hubspot = require('@hubspot/api-client');
+
 exports.main = async (context, sendResponse) => {
   const { event } = context;
 
+  const { hs_ticket_id } = context.propertiesToSend;
+
+  const hs = new hubspot.Client({
+    accessToken: context.secrets.PRIVATE_APP_ACCESS_TOKEN
+  });
+
+  console.log("context: ", context)
+
   if (event && event.type === 'SUBMIT') {
-    const { product_name,  } = event.payload.formState;
-    sendResponse({
-      message: {
-        type: 'SUCCESS',
-        body: `Request was successful. Deal created for ${product_name}`,
+    const { product_name, ship_date } = event.payload.formState;
+
+    const ticketObj = {
+      properties: {
+        shipping: 'expedited',
+        ship_date,
       },
-    });
+    }
+
+    try {
+      const updateRequest = await hs.crm.tickets.basicApi.update(hs_ticket_id, ticketObj);
+      console.log("update request: ", updateRequest)
+      sendResponse({
+        message: {
+          type: 'SUCCESS',
+          body: `Request submitted for ${product_name}.`,
+        },
+      });
+    } catch (error) {
+      console.log("error: ", error)
+      sendResponse({
+        message: {
+          type: 'FAILURE',
+          body: `Request failed for ${product_name}.`,
+        },
+      });
+    }
+
+
   }
 
   sendResponse({

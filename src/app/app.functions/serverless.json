@@ -4,7 +4,7 @@
   "appFunctions": {
     "crm-card": {
       "file": "crm-card.js",
-      "secrets": []
+      "secrets": ["PRIVATE_APP_ACCESS_TOKEN"]
     }
   }
 }
