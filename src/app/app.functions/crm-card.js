@@ -3,7 +3,7 @@ const hubspot = require('@hubspot/api-client');
 exports.main = async (context, sendResponse) => {
   const { event } = context;
 
-  const { hs_ticket_id } = context.propertiesToSend;
+  const { hs_ticket_id, shipping } = context.propertiesToSend;
 
   const hs = new hubspot.Client({
     accessToken: context.secrets.PRIVATE_APP_ACCESS_TOKEN
@@ -59,6 +59,7 @@ exports.main = async (context, sendResponse) => {
             name: 'product_name',
             inputType: 'text',
             label: 'Product name',
+            readonly: shipping === 'expedited',
             initialValue: '',
           },
           {
@@ -66,11 +67,13 @@ exports.main = async (context, sendResponse) => {
             name: 'ship_date',
             inputType: 'text',
             label: 'Ship by date',
+            readonly: shipping === 'expedited',
             initialValue: '',
           },
           {
             type: 'button',
             text: 'Submit request',
+            disabled: shipping === 'expedited',
             onClick: {
               type: 'SUBMIT',
               serverlessFunction: 'crm-card',
