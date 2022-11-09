@@ -9,19 +9,16 @@ exports.main = async (context, sendResponse) => {
     accessToken: context.secrets.PRIVATE_APP_ACCESS_TOKEN
   });
 
-  console.log("context: ", context)
-
   if (event && event.type === 'SUBMIT') {
     const { product_name, ship_date } = event.payload.formState;
 
     const ticketObj = {
       properties: {
+        product_name,
         shipping: 'expedited',
         ship_date,
       },
     }
-
-    console.log('ticket object: ', ticketObj)
 
     try {
       const updateRequest = await hs.crm.tickets.basicApi.update(hs_ticket_id, ticketObj);
@@ -60,7 +57,7 @@ exports.main = async (context, sendResponse) => {
             inputType: 'text',
             label: 'Product name',
             readonly: shipping === 'expedited',
-            initialValue: '',
+            initialValue: 'Credit card reader',
           },
           {
             type: 'input',
