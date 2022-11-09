@@ -23,7 +23,7 @@ exports.main = async (context, sendResponse) => {
 
     try {
       const updateRequest = await hs.crm.tickets.basicApi.update(hs_ticket_id, ticketObj);
-      console.log("update request: ", updateRequest)
+      console.log("update request here: ", updateRequest)
       sendResponse({
         message: {
           type: 'SUCCESS',
