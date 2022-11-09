@@ -21,6 +21,8 @@ exports.main = async (context, sendResponse) => {
       },
     }
 
+    console.log('ticket object: ', ticketObj)
+
     try {
       const updateRequest = await hs.crm.tickets.basicApi.update(hs_ticket_id, ticketObj);
       console.log("update request here: ", updateRequest)
@@ -34,8 +36,8 @@ exports.main = async (context, sendResponse) => {
       console.log("error: ", error)
       sendResponse({
         message: {
-          type: 'FAILURE',
-          body: `Request failed for ${product_name}.`,
+          type: 'ERROR',
+          body: `Request failed for ${product_name}. Error: ${error.message}`,
         },
       });
     }
