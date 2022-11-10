@@ -32,7 +32,6 @@ exports.main = async (context, sendResponse) => {
           {
             type: 'button',
             text: 'Submit request',
-            disabled: shipping === 'expedited',
             onClick: {
               type: 'SUBMIT',
               serverlessFunction: 'crm-card',
