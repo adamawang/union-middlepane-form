@@ -8,7 +8,7 @@ exports.main = async (context, sendResponse) => {
     sendResponse({
       message: {
         type: 'SUCCESS',
-        body: `Success!`,
+        body: `Successfully submitted!`,
       },
     });
   }
