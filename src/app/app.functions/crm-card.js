@@ -1,12 +1,14 @@
+const hubspot = require('@hubspot/api-client');
+
 exports.main = async (context, sendResponse) => {
   const { event } = context;
 
   if (event && event.type === 'SUBMIT') {
-    const { product_name,  } = event.payload.formState;
+
     sendResponse({
       message: {
         type: 'SUCCESS',
-        body: `Request processed for ${product_name}`,
+        body: `Success!`,
       },
     });
   }
@@ -15,28 +17,22 @@ exports.main = async (context, sendResponse) => {
     sections: [
       {
         type: 'text',
-        text: "To request expedited shipping, fill out the form below.",
+        text: "Form example",
       },
       {
         type: 'form',
         content: [
           {
             type: 'input',
-            name: 'product_name',
+            name: 'name',
             inputType: 'text',
-            label: 'Product name',
-            initialValue: '',
-          },
-          {
-            type: 'input',
-            name: 'ship_date',
-            inputType: 'text',
-            label: 'Ship by date',
+            label: 'Name',
             initialValue: '',
           },
           {
             type: 'button',
             text: 'Submit request',
+            disabled: shipping === 'expedited',
             onClick: {
               type: 'SUBMIT',
               serverlessFunction: 'crm-card',

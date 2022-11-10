@@ -1,7 +1,16 @@
 {
   "name": "Expedited shipping request form",
   "description": "Submit a request for expedited shipping",
-  "scopes": ["crm.objects.contacts.read", "crm.objects.contacts.write"],
+  "scopes": [
+    "crm.objects.contacts.read",
+    "crm.objects.contacts.write",
+    "crm.objects.custom.read",
+    "crm.schemas.custom.read",
+    "crm.objects.custom.write",
+    "crm.schemas.custom.write",
+    "tickets",
+    "crm.import"
+  ],
   "public": false,
   "extensions": {
     "crm": {
