@@ -21,20 +21,20 @@ exports.main = async (context, sendResponse) => {
     }
 
     try {
-      const updateRequest = await hs.crm.tickets.basicApi.update(hs_ticket_id, ticketObj);
-      console.log("update request here: ", updateRequest)
+      await hs.crm.tickets.basicApi.update(hs_ticket_id, ticketObj);
+
       sendResponse({
         message: {
           type: 'SUCCESS',
-          body: `Request submitted for ${product_name}.`,
+          body: `Request submitted. Creating deal for ${product_name}.`,
         },
       });
     } catch (error) {
-      console.log("error: ", error)
+      console.log("API error: ", error.message)
       sendResponse({
         message: {
           type: 'ERROR',
-          body: `Request failed for ${product_name}. Error: ${error.message}`,
+          body: `Request failed for ${product_name}.`,
         },
       });
     }
@@ -56,7 +56,7 @@ exports.main = async (context, sendResponse) => {
             name: 'product_name',
             inputType: 'text',
             label: 'Product name',
-            readonly: shipping === 'expedited',
+            readonly: true,
             initialValue: 'Credit card reader',
           },
           {
