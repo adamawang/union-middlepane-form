@@ -30,7 +30,7 @@ exports.main = async (context, sendResponse) => {
         },
       });
     } catch (error) {
-      console.log("API error: ", error.message)
+
       sendResponse({
         message: {
           type: 'ERROR',
