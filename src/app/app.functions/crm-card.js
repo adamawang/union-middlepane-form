@@ -43,7 +43,8 @@ exports.main = async (context, sendResponse) => {
   const lastContactDate = new Date(last_contacted);
   const today = new Date();
   const dayInMs = 1000 * 60 * 60 * 24;
-  const showVipCustomerAlert = lastContactDate <= new Date(today.getTime() - (1 * dayInMs));
+  const days = 0;
+  const showVipCustomerAlert = lastContactDate.getTime() <= new Date(today.getTime() - (days * dayInMs)).getTime();
 
   const vipCustomerAlert = [
     {
