@@ -40,21 +40,25 @@ exports.main = async (context, sendResponse) => {
     }
   }
 
-  const header = [
+  const lastContactDate = new Date(last_contacted);
+  const today = new Date();
+  const dayInMs = 1000 * 60 * 60 * 24;
+  const showVipCustomerAlert = lastContactDate < (today.getTime() - 10 * dayInMs);
+
+  const vipCustomerAlert = [
     {
       type: 'alert',
       title: "Outreach for VIP customer",
       body: "It's been 10+ days since we've last contacted this customer. Send a follow-up email.",
-      variant: "warning"
+      variant: "error"
     },
     {
       type: 'divider',
       distance: 'medium',
     },
-  ]
+  ];
 
-  const lastContactDate = new Date(last_contacted);
-  const showVIPCustomerAlert =
+  const header = showVipCustomerAlert ? vipCustomerAlert : [];
 
   sendResponse({
     sections: [
