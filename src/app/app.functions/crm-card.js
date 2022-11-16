@@ -59,7 +59,7 @@ exports.main = async (context, sendResponse) => {
     },
   ];
 
-  const header = showVipCustomerAlert ? vipCustomerAlert : [];
+  const header = showVipCustomerAlert ? [...vipCustomerAlert] : [];
 
   sendResponse({
     sections: [
