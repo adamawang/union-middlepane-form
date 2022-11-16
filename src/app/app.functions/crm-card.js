@@ -3,7 +3,7 @@ const hubspot = require('@hubspot/api-client');
 exports.main = async (context, sendResponse) => {
   const { event } = context;
 
-  const { hs_contact_id, last_contacted, last_activity } = context.propertiesToSend;
+  const { hs_contact_id, notes_last_contacted } = context.propertiesToSend;
 
   const hs = new hubspot.Client({
     accessToken: context.secrets.PRIVATE_APP_ACCESS_TOKEN
@@ -40,7 +40,7 @@ exports.main = async (context, sendResponse) => {
     }
   }
 
-  const lastContactDate = new Date(last_contacted);
+  const lastContactDate = new Date(notes_last_contacted);
   const today = new Date();
   const dayInMs = 1000 * 60 * 60 * 24;
   const days = 0;

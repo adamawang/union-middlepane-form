@@ -8,7 +8,7 @@
       "objectTypes": [
         {
           "name": "contacts",
-          "propertiesToSend": ["hs_contact_id", "last_contacted", "last_activity"]
+          "propertiesToSend": ["hs_contact_id", "notes_last_contacted", "last_activity"]
         }
       ]
     }
