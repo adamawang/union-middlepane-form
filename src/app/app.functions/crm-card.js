@@ -3,7 +3,7 @@ const hubspot = require('@hubspot/api-client');
 exports.main = async (context, sendResponse) => {
   const { event } = context;
 
-  const { hs_ticket_id, shipping } = context.propertiesToSend;
+  const { hs_contact_id, last_contacted, last_activity } = context.propertiesToSend;
 
   const hs = new hubspot.Client({
     accessToken: context.secrets.PRIVATE_APP_ACCESS_TOKEN
@@ -21,7 +21,7 @@ exports.main = async (context, sendResponse) => {
     }
 
     try {
-      await hs.crm.tickets.basicApi.update(hs_ticket_id, ticketObj);
+      await hs.crm.tickets.basicApi.update(hs_contact_id, ticketObj);
 
       sendResponse({
         message: {
@@ -40,8 +40,25 @@ exports.main = async (context, sendResponse) => {
     }
   }
 
+  const header = [
+    {
+      type: 'alert',
+      title: "Outreach for VIP customer",
+      body: "It's been 10+ days since we've last contacted this customer. Send a follow-up email.",
+      variant: "warning"
+    },
+    {
+      type: 'divider',
+      distance: 'medium',
+    },
+  ]
+
+  const lastContactDate = new Date(last_contacted);
+  const showVIPCustomerAlert =
+
   sendResponse({
     sections: [
+      ...header,
       {
         type: 'text',
         text: "To request expedited shipping, fill out the form below.",
@@ -54,7 +71,6 @@ exports.main = async (context, sendResponse) => {
             name: 'product_name',
             inputType: 'text',
             label: 'Product name',
-            readonly: true,
             initialValue: 'Credit card reader',
           },
           {
@@ -62,13 +78,13 @@ exports.main = async (context, sendResponse) => {
             name: 'ship_date',
             inputType: 'text',
             label: 'Ship by date',
-            readonly: shipping === 'expedited',
+            readonly: false,
             initialValue: '',
           },
           {
             type: 'button',
             text: 'Submit request',
-            disabled: shipping === 'expedited',
+            disabled: false,
             onClick: {
               type: 'SUBMIT',
               serverlessFunction: 'crm-card',
