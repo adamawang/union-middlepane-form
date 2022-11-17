@@ -8,7 +8,7 @@ exports.main = async (context, sendResponse) => {
   const hs = new hubspot.Client({
     accessToken: context.secrets.PRIVATE_APP_ACCESS_TOKEN
   });
-
+  console.log('Notes last contacted: ', notes_last_contacted)
   const lastContactDate = new Date(notes_last_contacted);
   const today = new Date();
   const dayInMs = 1000 * 60 * 60 * 24;
