@@ -113,12 +113,11 @@ exports.main = async (context, sendResponse) => {
       )
       console.log("created second one: ", dealAssociationResponse2)
 
-      return sendResponse({
+      sendResponse({
         message: {
           type: 'SUCCESS',
           body: `Request successful. Deal created for ${product_name}.`,
         },
-        sections: [...vipCustomerAlert, ...header, ...successComponent]
       });
     } catch (error) {
       console.log("error in api: ", error.message)
@@ -127,7 +126,6 @@ exports.main = async (context, sendResponse) => {
           type: 'ERROR',
           body: `Request failed for ${product_name}.`,
         },
-        sections: [...vipCustomerAlert, ...header, ...failureComponent]
       });
     }
   }
@@ -138,7 +136,7 @@ exports.main = async (context, sendResponse) => {
   const days = 0;
   const showVipCustomerAlert = lastContactDate.getTime() <= new Date(today.getTime() - (days * dayInMs)).getTime();
 
-  return sendResponse({
+  sendResponse({
     sections,
   });
 };
