@@ -9,10 +9,16 @@ exports.main = async (context, sendResponse) => {
     accessToken: context.secrets.PRIVATE_APP_ACCESS_TOKEN
   });
 
-  const vipCustomerAlert = [
+  const lastContactDate = new Date(notes_last_contacted);
+  const today = new Date();
+  const dayInMs = 1000 * 60 * 60 * 24;
+  const days = 0;
+  const showVipCustomerAlert = lastContactDate.getTime() <= new Date(today.getTime() - (days * dayInMs)).getTime();
+
+  const vipCustomerAlert = showVipCustomerAlert ? [
     {
       type: 'alert',
-      title: "Outreach for VIP customer",
+      title: "VIP customer outreach",
       body: "It's been 10+ days since we've last contacted this customer. Send a follow-up email.",
       variant: "error"
     },
@@ -20,7 +26,7 @@ exports.main = async (context, sendResponse) => {
       type: 'divider',
       distance: 'medium',
     },
-  ];
+  ] : [];
 
   const header = [
     {
@@ -67,20 +73,6 @@ exports.main = async (context, sendResponse) => {
     },
   ]
 
-  const successComponent = [
-    {
-      type: 'text',
-      text: "Thank you for submitting your request.",
-    },
-  ]
-
-  const failureComponent = [
-    {
-      type: 'text',
-      text: "Unable to submit your request.",
-    },
-  ]
-
   if (event && event.type === 'SUBMIT') {
     const { product_name, ship_date } = event.payload.formState;
 
@@ -93,25 +85,22 @@ exports.main = async (context, sendResponse) => {
 
     try {
       const createDealResponse = await hs.crm.deals.basicApi.create(dealObj);
-      console.log('create deal response: ', createDealResponse)
       const contactAssociationsResponse = await hs.crm.contacts.associationsApi.getAll(hs_object_id, 'companies')
 
-      console.log('contact assoc: ', contactAssociationsResponse);
-
-      const dealAssociationResponse1 = await hs.crm.deals.associationsApi.create(
+      await hs.crm.deals.associationsApi.create(
         createDealResponse.id,
         'contacts',
         hs_object_id,
         'deal_to_contact',
       )
-      console.log("created first one: ", dealAssociationResponse1)
-      const dealAssociationResponse2 = await hs.crm.deals.associationsApi.create(
+
+      await hs.crm.deals.associationsApi.create(
         createDealResponse.id,
         'companies',
         contactAssociationsResponse.results[0].id,
         'deal_to_company',
       )
-      console.log("created second one: ", dealAssociationResponse2)
+
 
       sendResponse({
         message: {
@@ -129,12 +118,6 @@ exports.main = async (context, sendResponse) => {
       });
     }
   }
-
-  const lastContactDate = new Date(notes_last_contacted);
-  const today = new Date();
-  const dayInMs = 1000 * 60 * 60 * 24;
-  const days = 0;
-  const showVipCustomerAlert = lastContactDate.getTime() <= new Date(today.getTime() - (days * dayInMs)).getTime();
 
   sendResponse({
     sections,
