@@ -15,7 +15,7 @@ exports.main = async (context, sendResponse) => {
     const dealObj = {
       properties: {
         dealname: `${product_name} for ${firstname} ${lastname}`,
-        closedate: ship_date,
+        closedate: new Date(ship_date).toString(),
       },
     }
 

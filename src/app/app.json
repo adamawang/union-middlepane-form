@@ -14,7 +14,6 @@
     "crm.schemas.custom.read",
     "crm.objects.custom.write",
     "crm.schemas.custom.write",
-    "contacts",
     "tickets",
     "crm.import"
   ],
