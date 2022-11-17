@@ -11,7 +11,7 @@ exports.main = async (context, sendResponse) => {
 
   const today = new Date();
   const dayInMs = 1000 * 60 * 60 * 24;
-  const days = 0;
+  const days = 10;
   const showVipCustomerAlert = notes_last_contacted <= new Date(today.getTime() - (days * dayInMs)).getTime();
 
   const vipCustomerAlert = showVipCustomerAlert ? [
