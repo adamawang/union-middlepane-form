@@ -9,6 +9,9 @@ exports.main = async (context, sendResponse) => {
     accessToken: context.secrets.PRIVATE_APP_ACCESS_TOKEN
   });
 
+  const brokenDate = new Date(1668530493557);
+  console.log('broken date: new Date(1668530493557) = ', brokenDate)
+
   const today = new Date();
   const dayInMs = 1000 * 60 * 60 * 24;
   const days = 10;
