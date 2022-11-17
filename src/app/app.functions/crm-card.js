@@ -21,12 +21,21 @@ exports.main = async (context, sendResponse) => {
 
     try {
       const createDealResponse = await hs.crm.deals.basicApi.create(dealObj);
+      const contactAssociationsResponse = await hs.crm.contacts.associationsApi.getAll(hs_object_id, 'companies')
+
+      console.log('contact assoc: ', contactAssociations);
 
       await hs.crm.deals.associationsApi.create(
         createDealResponse.id,
         'contacts',
         hs_object_id,
         'deal_to_contact',
+      )
+      await hs.crm.deals.associationsApi.create(
+        createDealResponse.id,
+        'companies',
+        contactAssociationsResponse.results[0].id,
+        'deal_to_company',
       )
 
       sendResponse({
