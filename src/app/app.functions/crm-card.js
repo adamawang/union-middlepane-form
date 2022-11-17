@@ -12,6 +12,7 @@ exports.main = async (context, sendResponse) => {
   const brokenDate = new Date(1668530493557);
   const brokenDateWithVar = new Date(notes_last_contacted);
   console.log('broken date: new Date(1668530493557) = ', brokenDate)
+  console.log('what is the var: ', notes_last_contacted, typeof notes_last_contacted)
   console.log('broken date: new Date(var) = ', brokenDateWithVar)
 
   const today = new Date();
