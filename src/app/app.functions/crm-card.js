@@ -9,6 +9,78 @@ exports.main = async (context, sendResponse) => {
     accessToken: context.secrets.PRIVATE_APP_ACCESS_TOKEN
   });
 
+  const vipCustomerAlert = [
+    {
+      type: 'alert',
+      title: "Outreach for VIP customer",
+      body: "It's been 10+ days since we've last contacted this customer. Send a follow-up email.",
+      variant: "error"
+    },
+    {
+      type: 'divider',
+      distance: 'medium',
+    },
+  ];
+
+  const header = [
+    {
+      type: 'heading',
+      text: 'Expedited Shipping Request Form'
+    },
+  ]
+
+  const sections = [
+    ...vipCustomerAlert,
+    ...header,
+    {
+      type: 'text',
+      text: "To request expedited shipping, fill out the form below.",
+    },
+    {
+      type: 'form',
+      content: [
+        {
+          type: 'input',
+          name: 'product_name',
+          inputType: 'text',
+          label: 'Product name',
+          initialValue: 'Credit card reader',
+        },
+        {
+          type: 'input',
+          name: 'ship_date',
+          inputType: 'text',
+          label: 'Ship by date',
+          readonly: false,
+          initialValue: '',
+        },
+        {
+          type: 'button',
+          text: 'Submit request',
+          disabled: false,
+          onClick: {
+            type: 'SUBMIT',
+            serverlessFunction: 'crm-card',
+          },
+        },
+      ],
+    },
+  ]
+
+  const successComponent = [
+    {
+      type: 'text',
+      text: "Thank you for submitting your request.",
+    },
+  ]
+
+  const failureComponent = [
+    {
+      type: 'text',
+      text: "Unable to submit your request.",
+    },
+  ]
+
   if (event && event.type === 'SUBMIT') {
     const { product_name, ship_date } = event.payload.formState;
 
@@ -26,24 +98,27 @@ exports.main = async (context, sendResponse) => {
 
       console.log('contact assoc: ', contactAssociationsResponse);
 
-      await hs.crm.deals.associationsApi.create(
+      const dealAssociationResponse1 = await hs.crm.deals.associationsApi.create(
         createDealResponse.id,
         'contacts',
         hs_object_id,
         'deal_to_contact',
       )
-      await hs.crm.deals.associationsApi.create(
+      console.log("created first one: ", dealAssociationResponse1)
+      const dealAssociationResponse2 = await hs.crm.deals.associationsApi.create(
         createDealResponse.id,
         'companies',
         contactAssociationsResponse.results[0].id,
         'deal_to_company',
       )
+      console.log("created second one: ", dealAssociationResponse2)
 
       sendResponse({
         message: {
           type: 'SUCCESS',
           body: `Request successful. Deal created for ${product_name}.`,
         },
+        sections: [...vipCustomerAlert, ...header, ...successComponent]
       });
     } catch (error) {
       console.log("error in api: ", error.message)
@@ -52,6 +127,7 @@ exports.main = async (context, sendResponse) => {
           type: 'ERROR',
           body: `Request failed for ${product_name}.`,
         },
+        sections: [...vipCustomerAlert, ...header, ...failureComponent]
       });
     }
   }
@@ -62,59 +138,7 @@ exports.main = async (context, sendResponse) => {
   const days = 0;
   const showVipCustomerAlert = lastContactDate.getTime() <= new Date(today.getTime() - (days * dayInMs)).getTime();
 
-  const vipCustomerAlert = [
-    {
-      type: 'alert',
-      title: "Outreach for VIP customer",
-      body: "It's been 10+ days since we've last contacted this customer. Send a follow-up email.",
-      variant: "error"
-    },
-    {
-      type: 'divider',
-      distance: 'medium',
-    },
-  ];
-
   sendResponse({
-    sections: [
-      ...vipCustomerAlert,
-      {
-        type: 'heading',
-        text: 'Expedited Shipping Request Form'
-      },
-      {
-        type: 'text',
-        text: "To request expedited shipping, fill out the form below.",
-      },
-      {
-        type: 'form',
-        content: [
-          {
-            type: 'input',
-            name: 'product_name',
-            inputType: 'text',
-            label: 'Product name',
-            initialValue: 'Credit card reader',
-          },
-          {
-            type: 'input',
-            name: 'ship_date',
-            inputType: 'text',
-            label: 'Ship by date',
-            readonly: false,
-            initialValue: '',
-          },
-          {
-            type: 'button',
-            text: 'Submit request',
-            disabled: false,
-            onClick: {
-              type: 'SUBMIT',
-              serverlessFunction: 'crm-card',
-            },
-          },
-        ],
-      },
-    ],
+    sections,
   });
 };
