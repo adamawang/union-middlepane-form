@@ -11,6 +11,7 @@ exports.main = async (context, sendResponse) => {
   console.log('Notes last contacted: ', notes_last_contacted)
   const lastContactDate = new Date(notes_last_contacted);
   const today = new Date();
+  console.log("what is today...: ", today)
   const dayInMs = 1000 * 60 * 60 * 24;
   const days = 0;
   const showVipCustomerAlert = lastContactDate.getTime() <= new Date(today.getTime() - (days * dayInMs)).getTime();
