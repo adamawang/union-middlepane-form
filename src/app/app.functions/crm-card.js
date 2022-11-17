@@ -3,7 +3,7 @@ const hubspot = require('@hubspot/api-client');
 exports.main = async (context, sendResponse) => {
   const { event } = context;
 
-  const { hs_object_id, notes_last_contacted } = context.propertiesToSend;
+  const { hs_object_id, notes_last_contacted, firstname, lastname } = context.propertiesToSend;
 
   const hs = new hubspot.Client({
     accessToken: context.secrets.PRIVATE_APP_ACCESS_TOKEN
@@ -12,21 +12,27 @@ exports.main = async (context, sendResponse) => {
   if (event && event.type === 'SUBMIT') {
     const { product_name, ship_date } = event.payload.formState;
 
-    const contactObj = {
+    const dealObj = {
       properties: {
-        product_name,
-        shipping: 'expedited',
-        ship_date,
+        dealname: `${product_name} for ${firstname} ${lastname}`,
+        closedate: ship_date,
       },
     }
 
     try {
-      await hs.crm.contacts.basicApi.update(hs_object_id, contactObj);
+      const createDealResponse = await hs.crm.deals.basicApi.create(dealObj);
+
+      await hs.crm.deals.associationsApi.create(
+        createDealResponse.id,
+        'contacts',
+        hs_object_id,
+        'deal_to_contact',
+      )
 
       sendResponse({
         message: {
           type: 'SUCCESS',
-          body: `Request submitted. Creating deal for ${product_name}.`,
+          body: `Request successful. Deal created for ${product_name}.`,
         },
       });
     } catch (error) {
@@ -39,7 +45,7 @@ exports.main = async (context, sendResponse) => {
       });
     }
   }
-  console.log("notes last contacted: ", notes_last_contacted)
+
   const lastContactDate = new Date(notes_last_contacted);
   const today = new Date();
   const dayInMs = 1000 * 60 * 60 * 24;
@@ -62,6 +68,10 @@ exports.main = async (context, sendResponse) => {
   sendResponse({
     sections: [
       ...vipCustomerAlert,
+      {
+        type: 'heading',
+        text: 'Expedited Shipping Request Form'
+      },
       {
         type: 'text',
         text: "To request expedited shipping, fill out the form below.",
