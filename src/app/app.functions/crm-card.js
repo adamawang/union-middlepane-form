@@ -46,7 +46,7 @@ exports.main = async (context, sendResponse) => {
   const days = 0;
   const showVipCustomerAlert = lastContactDate.getTime() <= new Date(today.getTime() - (days * dayInMs)).getTime();
 
-  const vipCustomerAlert = showVipCustomerAlert ? [
+  const vipCustomerAlert = [
     {
       type: 'alert',
       title: "Outreach for VIP customer",
@@ -57,7 +57,7 @@ exports.main = async (context, sendResponse) => {
       type: 'divider',
       distance: 'medium',
     },
-  ] : [];
+  ];
 
   sendResponse({
     sections: [
