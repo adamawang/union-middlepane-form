@@ -14,6 +14,7 @@ exports.main = async (context, sendResponse) => {
   const dayInMs = 1000 * 60 * 60 * 24;
   const days = 0;
   const showVipCustomerAlert = lastContactDate.getTime() <= new Date(today.getTime() - (days * dayInMs)).getTime();
+  console.log("should it be showing?: ", showVipCustomerAlert)
 
   const vipCustomerAlert = showVipCustomerAlert ? [
     {
@@ -27,6 +28,8 @@ exports.main = async (context, sendResponse) => {
       distance: 'medium',
     },
   ] : [];
+
+  console.log("what is VIP customer alert: ", vipCustomerAlert)
 
   const header = [
     {
