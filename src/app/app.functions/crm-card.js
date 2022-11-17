@@ -10,12 +10,13 @@ exports.main = async (context, sendResponse) => {
   });
   console.log('Notes last contacted: ', notes_last_contacted)
   const lastContactDate = new Date(notes_last_contacted);
+  console.log("this is the last contact date: ", lastContactDate)
   const today = new Date();
   console.log("what is today...: ", today)
   const dayInMs = 1000 * 60 * 60 * 24;
   const days = 0;
   const showVipCustomerAlert = lastContactDate.getTime() <= new Date(today.getTime() - (days * dayInMs)).getTime();
-  console.log("should it be showing?: ", showVipCustomerAlert)
+  console.log("should it be showing?: ", showVipCustomerAlert, lastContactDate.getTime(), new Date().getTime())
 
   const vipCustomerAlert = showVipCustomerAlert ? [
     {
