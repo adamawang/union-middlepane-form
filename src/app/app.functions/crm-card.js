@@ -10,7 +10,9 @@ exports.main = async (context, sendResponse) => {
   });
 
   const brokenDate = new Date(1668530493557);
+  const brokenDateWithVar = new Date(notes_last_contacted);
   console.log('broken date: new Date(1668530493557) = ', brokenDate)
+  console.log('broken date: new Date(var) = ', brokenDateWithVar)
 
   const today = new Date();
   const dayInMs = 1000 * 60 * 60 * 24;
@@ -29,8 +31,6 @@ exports.main = async (context, sendResponse) => {
       distance: 'medium',
     },
   ] : [];
-
-  console.log("what is VIP customer alert: ", vipCustomerAlert)
 
   const header = [
     {
