@@ -3,7 +3,7 @@ const hubspot = require('@hubspot/api-client');
 exports.main = async (context, sendResponse) => {
   const { event } = context;
 
-  const { hs_contact_id, notes_last_contacted } = context.propertiesToSend;
+  const { hs_object_id, notes_last_contacted } = context.propertiesToSend;
 
   const hs = new hubspot.Client({
     accessToken: context.secrets.PRIVATE_APP_ACCESS_TOKEN
@@ -12,7 +12,7 @@ exports.main = async (context, sendResponse) => {
   if (event && event.type === 'SUBMIT') {
     const { product_name, ship_date } = event.payload.formState;
 
-    const ticketObj = {
+    const contactObj = {
       properties: {
         product_name,
         shipping: 'expedited',
@@ -21,7 +21,7 @@ exports.main = async (context, sendResponse) => {
     }
 
     try {
-      await hs.crm.tickets.basicApi.update(hs_contact_id, ticketObj);
+      await hs.crm.contacts.basicApi.update(hs_object_id, contactObj);
 
       sendResponse({
         message: {
@@ -39,14 +39,14 @@ exports.main = async (context, sendResponse) => {
       });
     }
   }
-
+  console.log("notes last contacted: ", notes_last_contacted)
   const lastContactDate = new Date(notes_last_contacted);
   const today = new Date();
   const dayInMs = 1000 * 60 * 60 * 24;
   const days = 0;
   const showVipCustomerAlert = lastContactDate.getTime() <= new Date(today.getTime() - (days * dayInMs)).getTime();
 
-  const vipCustomerAlert = [
+  const vipCustomerAlert = showVipCustomerAlert ? [
     {
       type: 'alert',
       title: "Outreach for VIP customer",
@@ -57,13 +57,11 @@ exports.main = async (context, sendResponse) => {
       type: 'divider',
       distance: 'medium',
     },
-  ];
-
-  const header = showVipCustomerAlert ? [...vipCustomerAlert] : [];
+  ] : [];
 
   sendResponse({
     sections: [
-      ...header,
+      ...vipCustomerAlert,
       {
         type: 'text',
         text: "To request expedited shipping, fill out the form below.",
