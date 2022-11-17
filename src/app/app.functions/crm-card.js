@@ -21,9 +21,10 @@ exports.main = async (context, sendResponse) => {
 
     try {
       const createDealResponse = await hs.crm.deals.basicApi.create(dealObj);
+      console.log('create deal response: ', createDealResponse)
       const contactAssociationsResponse = await hs.crm.contacts.associationsApi.getAll(hs_object_id, 'companies')
 
-      console.log('contact assoc: ', contactAssociations.results);
+      console.log('contact assoc: ', contactAssociationsResponse);
 
       await hs.crm.deals.associationsApi.create(
         createDealResponse.id,
@@ -45,7 +46,7 @@ exports.main = async (context, sendResponse) => {
         },
       });
     } catch (error) {
-      console.log("error in api: ", error)
+      console.log("error in api: ", error.message)
       sendResponse({
         message: {
           type: 'ERROR',
