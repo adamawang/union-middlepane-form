@@ -17,8 +17,8 @@ exports.main = async (context, sendResponse) => {
   const vipCustomerAlert = showVipCustomerAlert ? [
     {
       type: 'alert',
-      title: "VIP customer outreach",
-      body: "It's been 10+ days since we've last contacted this customer. Send a follow-up email.",
+      title: "VIP customer",
+      body: "This customer belongs to Union's VIP program.",
       variant: "error"
     },
     {
