@@ -27,8 +27,6 @@ exports.main = async (context, sendResponse) => {
     },
   ] : [];
 
-  console.log("what is VIP customer alert: ", vipCustomerAlert)
-
   const header = [
     {
       type: 'heading',
