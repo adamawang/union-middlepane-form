@@ -11,7 +11,7 @@ exports.main = async (context, sendResponse) => {
 
   const today = new Date();
   const dayInMs = 1000 * 60 * 60 * 24;
-  const days = 3; // Can pull from preset
+  const days = 2; // Can pull from preset
   const showVipCustomerAlert = notes_last_contacted <= new Date(today.getTime() - (days * dayInMs)).getTime();
 
   const vipCustomerAlert = showVipCustomerAlert ? [
